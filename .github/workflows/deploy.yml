@@ -11,7 +11,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # environment: beanstalk-deploy
+    environment: beanstalk-deploy
 
     steps:
       - uses: actions/checkout@v4
