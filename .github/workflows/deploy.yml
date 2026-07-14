@@ -11,7 +11,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: beanstalk-deploy
+    # environment: beanstalk-deploy
 
     steps:
       - uses: actions/checkout@v4
@@ -48,7 +48,7 @@ jobs:
           aws elasticbeanstalk create-application-version \
             --application-name ${{ vars.APP_NAME }} \
             --version-label ${{ steps.version.outputs.label }} \
-            --source-bundle S3Bucket=${{ vars.S3_BUCKET }},S3Key=app-${{ steps.version.outputs.label }}.zip
+            --source-bundle S3Bucket=${{ secrets.S3_BUCKET }},S3Key=app-${{ steps.version.outputs.label }}.zip
 
       - name: Deploy new version and update APP_VERSION
         run: |
