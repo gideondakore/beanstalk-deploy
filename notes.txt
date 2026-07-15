@@ -42,5 +42,22 @@ Github OIDC Setups: https://docs.github.com/en/actions/how-tos/secure-your-work/
   ]
 }
 
-
-kfamfv
+///////////////////////////////////////////////////////////////////
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Federated": "arn:aws:iam::288761749193:oidc-provider/token.actions.githubusercontent.com"
+            },
+            "Action": "sts:AssumeRoleWithWebIdentity",
+            "Condition": {
+                "StringEquals": {
+                    "token.actions.githubusercontent.com:sub": "repo:gideondakore/beanstalk-deploy:environment:beanstalk-deploy",
+                    "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+                }
+            }
+        }
+    ]
+}
