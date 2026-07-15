@@ -25,6 +25,17 @@ app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
 
+app.get("/users", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT id, name, specialization FROM users ORDER BY id",
+    );
+    res.status(200).json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get("/db-check", async (req, res) => {
   try {
     const result = await pool.query("SELECT NOW()");
@@ -34,6 +45,36 @@ app.get("/db-check", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`App running on port ${port}`);
+async function initDb() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      specialization TEXT NOT NULL
+    )
+  `);
+
+  const { rows } = await pool.query(
+    "SELECT id FROM users WHERE name = $1 AND specialization = $2",
+    ["Gideon Dakore", "Backend"],
+  );
+
+  if (rows.length === 0) {
+    await pool.query(
+      "INSERT INTO users (name, specialization) VALUES ($1, $2)",
+      ["Gideon Dakore", "Backend"],
+    );
+  }
+}
+
+async function start() {
+  await initDb();
+  app.listen(port, () => {
+    console.log(`App running on port ${port}`);
+  });
+}
+
+start().catch((err) => {
+  console.error("Failed to start app:", err);
+  process.exit(1);
 });
