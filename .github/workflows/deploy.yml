@@ -33,7 +33,7 @@ jobs:
 
       - name: Set version label
         id: version
-        run: echo "label=v-$(git rev-parse --short HEAD)-${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+        run: echo "label=v-$(git rev-parse --short HEAD)-${{ github.run_id }}-${{ github.run_attempt }}" >> "$GITHUB_OUTPUT"
 
       - name: Zip source bundle
         run: zip -r app-${{ steps.version.outputs.label }}.zip app.js package.json package-lock.json
