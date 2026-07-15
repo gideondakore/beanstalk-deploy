@@ -10,8 +10,13 @@ permissions:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     environment: beanstalk-deploy
+
+    strategy:
+      matrix:
+        node-version: [24.x]
+        os: [ubuntu-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -26,7 +31,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
         run: npm ci --omit=dev

@@ -61,3 +61,44 @@ Github OIDC Setups: https://docs.github.com/en/actions/how-tos/secure-your-work/
         }
     ]
 }
+
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"elasticbeanstalk:CreateApplicationVersion",
+				"elasticbeanstalk:DescribeApplicationVersions",
+				"elasticbeanstalk:DescribeEnvironments",
+				"elasticbeanstalk:UpdateEnvironment"
+			],
+			"Resource": "*"
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"s3:PutObject",
+				"s3:GetObject"
+			],
+			"Resource": "arn:aws:s3:::eb-deploy-lab-288761749193-eu-west-1-an/*"
+		},
+		{
+			"Effect": "Allow",
+			"Action": "s3:*",
+			"Resource": "arn:aws:s3:::elasticbeanstalk-eu-west-1-288761749193"
+		},
+		{
+			"Effect": "Allow",
+			"Action": "cloudformation:*",
+			"Resource": "arn:aws:cloudformation:eu-west-1:288761749193:stack/awseb-*-stack/*"
+		}
+	]
+}
+
+
+////////////////////////////////////////////////
+aws elasticbeanstalk describe-environments \
+  --profile aws-training \
+  --environment-names Eb-lab-env \
+  --query 'Environments[0].[Status,Health,VersionLabel]'
