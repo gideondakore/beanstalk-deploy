@@ -45,6 +45,14 @@ app.get("/db-check", async (req, res) => {
   }
 });
 
+app.get("/hello", async (req, res) => {
+  try {
+    res.status(200).json({ message: "Hello, World!" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 async function initDb() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
